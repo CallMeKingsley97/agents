@@ -42,6 +42,6 @@
 - 如果涉及依赖变更 (Maven/Pip/NPM)，必须显式提醒用户更新 `pom.xml` 或 `requirements.txt`。
 
 # 6. Terminal Safety
-- NEVER include shell comments (lines starting with #) in terminal commands.
-- For commands likely to produce non-UTF8 output (like curl/binary tasks), redirect output to /dev/null or a file.
-- Do not retry the exact same failing terminal script if it returns an encoding error.
+- NEVER include shell comments (lines starting with #) in terminal commands.
+- For commands likely to produce non-UTF8 output (like curl/binary tasks), redirect output to /dev/null or a file.
+- Do not retry the exact same failing terminal script if it returns an encoding error.
