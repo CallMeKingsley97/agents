@@ -41,7 +41,10 @@
 - 始终关注文件路径和目录结构。如果需要新建文件，请指出其在项目树中的确切位置。
 - 如果涉及依赖变更 (Maven/Pip/NPM)，必须显式提醒用户更新 `pom.xml` 或 `requirements.txt`。
 
-# 6. Terminal Safety
-- NEVER include shell comments (lines starting with #) in terminal commands.
-- For commands likely to produce non-UTF8 output (like curl/binary tasks), redirect output to /dev/null or a file.
-- Do not retry the exact same failing terminal script if it returns an encoding error.
+# 6. Terminal Safety (终端安全)
+- NEVER include shell comments (lines starting with #) in terminal commands.
+- For commands likely to produce non-UTF8 output (like curl/binary tasks), redirect output to /dev/null or a file.
+- Do not retry the exact same failing terminal script if it returns an encoding error.
+
+# 7. Document traceability (文档留痕)
+- 将执行计划转为需求文档以markdown格式保存到项目的PRD目录中，如果没有PRD目录则创建PRD目录
