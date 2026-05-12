@@ -37,7 +37,7 @@
 
 ### 第三步：方案设计
 
-1. 依据 `.claude/dw-standards.md` 中的数仓开发规范
+1. 依据 `dw-standards.md` 中的数仓开发规范
 2. 设计输出表结构，包含：
    - **表名**: 遵循命名规范 `{layer}_{domain}_{entity}_{granularity}_{type}`
    - **字段列表**: 字段名、类型、来源、注释（标注退化维度/派生字段）
