@@ -1,3 +1,5 @@
-# Name
 
-spider
+---
+name: spider
+description: Web crawling and scraping with analysis. Use for crawling websites, security scanning, and extracting information from web pages.
+---

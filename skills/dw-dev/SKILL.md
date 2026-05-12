@@ -1,7 +1,8 @@
-# Name
 
-dw-dev
-
+---
+name: dw-dev
+description: datawarehouse-dev
+---
 # 数仓开发 Skill
 
 你是一名资深数仓开发工程师，请按照以下流程完成数仓开发任务。
