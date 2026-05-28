@@ -47,6 +47,32 @@ ods_{source_db}_{original_table}_{type}
 - 数量字段以 `_count` / `_num` 结尾
 - 时间字段以 `_time` / `_date` 结尾
 - 退化维度字段与来源表保持一致，不做重命名
+- 数仓常用字段命名规范如下：
+
+| 字段名 | 定义 / 描述 |
+|--------|--------------|
+| `_cnt` | 重复动作的次数 |
+| `_num` | 数量 |
+| `_amt` | 金额 |
+| `order` | 订单 |
+| `sku` | 商品 |
+| `spu` | SPU |
+| `cate` | 商品类目 |
+| `category_level1` | 商品类目1 |
+| `wechat_share` | 微信分享（关键字段） |
+| `task_id` | 涉及任务下发的具体任务ID |
+| `mall_id` | 统一商城/企业ID（原company_id取mall_id） |
+| `stock_id` | 仓库本身的属性，与订单无关 |
+| `purchase_stock_id` | 与订单相关，严格区分采购/配货仓 |
+| `deliver_stock_id` | 与订单相关，严格区分采购/配货仓 |
+| `merchant_id` | 商家ID（不再用seller_id） |
+| `back_category_id` | 后台类目ID |
+| `sku_id` | 商品ID |
+| `customer_store_id` | 门店ID |
+| `customer_store_name` | 门店名称 |
+| `purchase_user_id` | 供货经办人ID |
+| `purchase_user_name` | 供货经办人名称 |
+
 
 ## 三、分区规范
 
@@ -82,6 +108,22 @@ SET odps.sql.allow.fullscan=true;
 SET odps.sql.type.system.odps2=true;
 SET odps.sql.decimal.odps2=true;
 SET odps.sql.hive.compatible=true;
+
+
+CREATE TABLE IF NOT EXISTS xxxxx (
+    xxxx_id               BIGINT      COMMENT 'xxxxid',
+    xxx_name              STRING      COMMENT 'xxxx名称',
+    ...
+)
+COMMENT 'xxxxxxxx'
+PARTITIONED BY (dt STRING COMMENT '日期分区(yyyy-MM-dd)')
+
+SET odps.sql.allow.fullscan = true;
+SET odps.sql.type.system.odps2 = true;
+SET odps.sql.decimal.odps2 = true;
+SET odps.sql.hive.compatible = true;
+SET odps.instance.priority = 0;
+
 -- 其他必要 set 参数
 with cte as (
    select * from datawarehouse_max.xxxxx_daily_full where dt = '${dt}'
@@ -91,11 +133,12 @@ with cte as (
   select t1.* from datawarehouse_max.xxxxx_daily_asc t1 where t1.dt between date_sub('${dt}',6) and '${dt}'
 )
 
-insert overwrite table {target_table} partition(dt)
+insert overwrite table datawarehouse_max.xxxxxxxx partition(dt)
 select
     field1          -- 字段注释
   , field2          -- 字段注释
   , ...
+  , dt
 from  cte2
 ;
 ```
@@ -110,8 +153,7 @@ from  cte2
   - 长尾场景考虑 `SKYLINE` 优化
   - GROUP BY 倾斜使用 `set odps.sql.groupby.skewratio=0.1`
 - **调度参数**: 使用 DataWorks 调度参数而非硬编码日期
-  - `$[yyyy-mm-dd]` — 业务日期
-  - `$[yyyy-mm-dd-1]` — T-1
+  - '${dt}' — 业务日期
 
 ### 6.3 代码风格
 
