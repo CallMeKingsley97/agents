@@ -191,7 +191,7 @@ SQL 自检通过后，必须部署到 DataWorks，使用 alibabacloud-dataworks-
 
 | 配置项 | 默认值 | 说明 |
 |--------|--------|------|
-| **文件夹路径** | `bizroot/ADS/MaxCompute/数据开发/bg_ads/bg_ads_ai` | 所有新节点默认放到此路径下 |
+| **文件夹路径** | `bizroot/ADS/MaxCompute/bg_ads/bg_ads_ai` | 所有新节点默认放到此路径下；`file-folder-path` 已在 DataWorks“数据开发”目录体系内解析，不要再包含控制台顶层“数据开发” |
 | **节点名称** | 取 SQL 文件名（去 `.sql`） | 如 `ads_xxx.sql` → 节点名 `ads_xxx` |
 | **调度周期** | 小时（指定 6 时） | `cycle-type` = `NOT_DAY`，cron: `00 00 6 * * ?` |
 | **实例生成方式** | 发布后即时生成 | `start-effect-type` = `IMMEDIATE` |
@@ -204,7 +204,7 @@ SQL 自检通过后，必须部署到 DataWorks，使用 alibabacloud-dataworks-
 ### 强制动作
 
 1. **检查权限**: 先确认当前账号在 DataWorks 项目中有"数据开发-读写"权限和 `dataworks:CreateFile` RAM 权限。如无权限，直接告知用户并终止部署
-2. **检查文件路径冲突**: 确认 `bizroot/ADS/MaxCompute/数据开发/bg_ads_ai` 路径是否存在（用户截图确认）
+2. **检查文件路径冲突**: 确认 `bizroot/ADS/MaxCompute/bg_ads/bg_ads_ai` 路径是否存在（用户截图确认）。注意：控制台展示的顶层“数据开发”不是 `file-folder-path` 的一部分，禁止写成 `bizroot/ADS/MaxCompute/数据开发/bg_ads/bg_ads_ai`
 3. **创建文件**: 使用 `aliyun dataworks-public create-file` API 创建数据开发文件，**不能使用 create-node（FlowSpec 新版 API，旧版 IDE 不可见）**
 4. **设置调度**: 通过 `--cron-express`、`--para-value` 等参数配置调度
 5. **结果汇报**: 输出以下信息给用户确认
@@ -215,7 +215,7 @@ aliyun dataworks-public create-file \
   --project-id <PROJECT_ID> \
   --file-name "节点名称" \
   --file-type 10 \
-  --file-folder-path "bizroot/ADS/MaxCompute/数据开发/bg_ads/bg_ads_ai" \
+  --file-folder-path "bizroot/ADS/MaxCompute/bg_ads/bg_ads_ai" \
   --content "<SQL内容>" \
   --create-folder-if-not-exists true \
   --scheduler-type NORMAL \
