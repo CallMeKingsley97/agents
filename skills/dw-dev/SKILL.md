@@ -201,10 +201,19 @@ SQL 自检通过后，必须部署到 DataWorks，使用 alibabacloud-dataworks-
 | **参数** | `dt=$[yyyy-mm-dd-1]` | 节点调度参数，SQL 中用 `${dt}` 引用 |
 | **节点类型** | `ODPS_SQL` (file-type=10) | MaxCompute SQL 节点 |
 
+### 路径硬性校验
+
+> **[MUST] 创建 DataWorks 文件前必须校验 `--file-folder-path`。**
+>
+> - 只允许使用 `bizroot/ADS/MaxCompute/bg_ads/bg_ads_ai`，除非用户本轮明确指定其他目录。
+> - 禁止复用历史命令、上下文摘要、终端记录里的 `--file-folder-path`。
+> - 如果待执行命令中出现 `数据开发`、`/数据开发/` 或 `\数据开发\`，必须立即停止并改为正确路径后再执行。
+> - 控制台顶层“数据开发”只是 UI 展示层，不属于 OpenAPI 的 `file-folder-path` 参数。
+
 ### 强制动作
 
 1. **检查权限**: 先确认当前账号在 DataWorks 项目中有"数据开发-读写"权限和 `dataworks:CreateFile` RAM 权限。如无权限，直接告知用户并终止部署
-2. **检查文件路径冲突**: 确认 `bizroot/ADS/MaxCompute/bg_ads/bg_ads_ai` 路径是否存在（用户截图确认）。注意：控制台展示的顶层“数据开发”不是 `file-folder-path` 的一部分，禁止写成 `bizroot/ADS/MaxCompute/数据开发/bg_ads/bg_ads_ai`
+2. **检查文件路径冲突**: 确认 `bizroot/ADS/MaxCompute/bg_ads/bg_ads_ai` 路径是否存在（用户截图确认）。
 3. **创建文件**: 使用 `aliyun dataworks-public create-file` API 创建数据开发文件，**不能使用 create-node（FlowSpec 新版 API，旧版 IDE 不可见）**
 4. **设置调度**: 通过 `--cron-express`、`--para-value` 等参数配置调度
 5. **结果汇报**: 输出以下信息给用户确认
